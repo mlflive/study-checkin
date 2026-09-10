@@ -410,7 +410,34 @@ function fmtHMS(sec){ sec = Math.max(0, Math.floor(sec));
 /* ================= 数据模型（localStorage） ================= */
 const STORE_KEY = 'study_checkin_v1';
 function blankData(){
-  return { v: 1, settings: { dailyGoalMin: 120, weeklyGoalHours: 50, user: '', exams: [{ name: '第一场考试', date: '2026-11-30' }, { name: '第二场考试', date: '2027-03-15' }] }, records: {}, running: null };
+  return {
+    v: 2,
+    settings: {
+      dailyGoalMin: 430,        /* 每天 430 分钟（7 小时 10 分） */
+      weeklyGoalHours: 50,
+      user: '',
+      exams: [
+        { name: '国考', date: '2026-11-30' },
+        { name: '省考', date: '2027-03-15' }
+      ]
+    },
+    records: {}, running: null
+  };
+}
+/* 老数据一次性迁移（v1 → v2）：只改"旧默认值"，用户自己设置过的值不动 */
+const EXAM_RENAME = { '第一场考试': '国考', '第二场考试': '省考' };
+function migrateData(d){
+  if (!d || (typeof d.v === 'number' && d.v >= 2)) return d;
+  const s = d.settings || {};
+  if (s.dailyGoalMin === 120) s.dailyGoalMin = 430;     /* 旧默认 120 分钟 → 新默认 430 分钟 */
+  if (Array.isArray(s.exams)) {
+    s.exams.forEach(function (e) {
+      if (e && EXAM_RENAME[e.name]) e.name = EXAM_RENAME[e.name];
+    });
+  }
+  d.settings = s;
+  d.v = 2;
+  return d;
 }
 function loadData(){
   try {
@@ -418,7 +445,11 @@ function loadData(){
     if (!raw) return blankData();
     const d = JSON.parse(raw);
     const base = blankData();
-    return Object.assign(base, d, { settings: Object.assign(base.settings, d.settings || {}) });
+    const merged = Object.assign(base, d, { settings: Object.assign(base.settings, d.settings || {}) });
+    if (typeof d.v !== 'number') merged.v = 0;
+    migrateData(merged);
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(merged)); } catch (e2) {}
+    return merged;
   } catch (e) { return blankData(); }
 }
 function saveData(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(D)); } catch (e) { toast('⚠️ 保存失败：本地存储不可用'); } }

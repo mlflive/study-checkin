@@ -1,6 +1,6 @@
 /* 学习打卡助手 · 离线缓存 Service Worker
    更新网页后如需强制刷新缓存：把下面的 CACHE 版本号 +1 再上传即可 */
-const CACHE = 'study-checkin-v4';
+const CACHE = 'study-checkin-v5';
 const ASSETS = [
   './',
   './index.html',
