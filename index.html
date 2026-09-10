@@ -142,11 +142,11 @@ input{font-family:inherit}
 .overlay{position:fixed;inset:0;background:rgba(35,40,70,.45);backdrop-filter:blur(3px);
   display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
 .overlay.hidden{display:none}
-.modal{background:#fff;border-radius:20px;width:100%;max-width:430px;padding:24px;box-shadow:0 20px 60px rgba(20,25,60,.3)}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:430px;padding:24px;max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(20,25,60,.3)}
 .modal h3{font-size:18px;margin-bottom:16px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
-.field input[type=number],.field input[type=text]{width:100%;padding:11px 13px;border:1.5px solid var(--line);
+.field input[type=number],.field input[type=text],.field input[type=date]{width:100%;padding:11px 13px;border:1.5px solid var(--line);
   border-radius:11px;font-size:14px;outline:none}
 .field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(91,91,214,.13)}
 .modal .btns{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
@@ -158,6 +158,70 @@ input{font-family:inherit}
 
 footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:30px;line-height:1.9}
 
+/* ---------- 考试倒计时 ---------- */
+.cd-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cd-card{border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,#eef0ff,#fdf6ff);border:1px solid var(--line)}
+.cd-card.urgent{background:linear-gradient(135deg,#fff1f2,#fff7ed);border-color:#fecdd3}
+.cd-card.past{background:#f4f5fa;opacity:.75}
+.cd-name{font-size:13.5px;font-weight:700;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cd-num{display:flex;align-items:baseline;gap:4px;margin:4px 0 2px}
+.cd-num b{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cd-card.urgent .cd-num b{background:linear-gradient(135deg,#e11d48,#f97316);-webkit-background-clip:text;background-clip:text}
+.cd-card.past .cd-num b{background:none;color:var(--muted);-webkit-text-fill-color:var(--muted)}
+.cd-num span{font-size:14px;font-weight:700;color:var(--muted)}
+.cd-sub{font-size:12px;color:var(--muted);line-height:1.7}
+@media (max-width:700px){ .cd-grid{grid-template-columns:1fr} }
+
+/* ---------- 本周目标 ---------- */
+.wk-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.wk-num{display:flex;align-items:baseline;gap:2px}
+.wk-num b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.wk-num span{font-size:13px;color:var(--muted)}
+.wk-pct{font-size:18px;font-weight:800;color:var(--primary)}
+.wk-bar{height:14px;border-radius:999px;background:#eceef9;overflow:hidden}
+.wk-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary2));
+  transition:width .5s ease}
+.wk-fill.over{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.wk-sub{margin-top:9px;font-size:13px;color:var(--muted)}
+.wk-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.wk-day{border-radius:10px;background:#f4f5fb;padding:8px 2px;text-align:center;font-variant-numeric:tabular-nums}
+.wk-day b{display:block;font-size:12.5px;font-weight:700}
+.wk-day span{font-size:10.5px;color:var(--muted)}
+.wk-day.strong b,.wk-day.strong span{color:#fff}
+.wk-day.today{box-shadow:inset 0 0 0 2px var(--primary)}
+.wk-day.zero span{color:#c3c7dd}
+
+/* ---------- 按月查看 ---------- */
+.month-nav{display:flex;align-items:center;gap:8px;font-weight:700}
+.month-nav b{font-size:14px;min-width:96px;text-align:center}
+.month-nav .icon-btn{width:30px;height:30px;border-radius:9px;font-size:15px}
+.mstats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.mstat{background:#f8f9ff;border:1px solid var(--line);border-radius:14px;padding:10px 6px;text-align:center}
+.mstat .num{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.mstat .lab{font-size:11.5px;color:var(--muted);margin-top:2px}
+.cal-head,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-head{margin-bottom:6px}
+.cal-head span{text-align:center;font-size:12px;color:var(--muted)}
+.cal-cell{position:relative;aspect-ratio:1/1;border-radius:10px;background:#f4f5fb;border:1px solid transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-variant-numeric:tabular-nums;
+  transition:.15s;overflow:hidden}
+.cal-cell.blank{background:transparent}
+.cal-cell .d{font-size:12.5px;font-weight:700;line-height:1}
+.cal-cell .t{font-size:9.5px;color:var(--muted);line-height:1}
+.cal-cell.has{cursor:pointer}
+.cal-cell.has:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(80,90,190,.18)}
+.cal-cell.strong .d,.cal-cell.strong .t{color:#fff}
+.cal-cell.today{border-color:var(--primary)}
+.cal-cell.sel{border-color:var(--primary);box-shadow:0 0 0 2px rgba(91,91,214,.28)}
+.cal-cell .ck{position:absolute;top:2px;right:4px;font-size:9px;color:var(--green);font-weight:700}
+.cal-cell.strong .ck{color:#fff}
+.day-detail{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px;font-size:13px;color:var(--muted)}
+.day-detail b{color:var(--ink)}
+.day-detail ul{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.day-detail li{display:flex;justify-content:space-between;gap:10px;background:#fafbff;border:1px solid var(--line);
+  border-radius:10px;padding:8px 12px}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr}
   .hero-right{flex-direction:row;flex-wrap:wrap;justify-content:center}
@@ -182,6 +246,11 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:30px;lin
       <button class="icon-btn" id="btnSettings" title="设置与数据管理">⚙️</button>
     </div>
   </header>
+
+  <section class="panel" style="margin-bottom:18px">
+    <div class="section-title">考试倒计时 <span class="hint" id="cdHint"></span></div>
+    <div class="cd-grid" id="cdGrid"></div>
+  </section>
 
   <section class="hero">
     <div class="panel hero-left">
@@ -233,6 +302,32 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:30px;lin
     </div>
   </section>
 
+  <section class="panel" style="margin-bottom:18px">
+    <div class="section-title">本周目标 <span class="hint" id="weekRange"></span></div>
+    <div class="wk-head">
+      <div class="wk-num"><b id="weekDone">0 小时</b><span id="weekOf"></span>
+      </div>
+      <div class="wk-pct" id="weekPct">0%</div>
+    </div>
+    <div class="wk-bar"><div class="wk-fill" id="weekFill"></div></div>
+    <div class="wk-sub" id="weekSub"></div>
+    <div class="wk-days" id="weekDays"></div>
+  </section>
+
+  <section class="panel" style="margin-bottom:18px">
+    <div class="section-title">按月查看
+      <span class="month-nav">
+        <button class="icon-btn" id="prevMonth" title="上个月">‹</button>
+        <b id="monthLabel"></b>
+        <button class="icon-btn" id="nextMonth" title="下个月">›</button>
+      </span>
+    </div>
+    <div class="mstats" id="monthStats"></div>
+    <div class="cal-head" id="calHead"></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="day-detail" id="dayDetail"></div>
+  </section>
+
   <section class="panel">
     <div class="section-title">最近学习记录 <span class="hint" id="recHint"></span></div>
     <ul id="recordList"></ul>
@@ -253,12 +348,34 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:30px;lin
       <input type="number" id="goalInput" min="1" max="1440" step="10">
     </div>
     <div class="field">
+      <label for="weekGoalInput">每周学习目标（小时）</label>
+      <input type="number" id="weekGoalInput" min="1" max="168" step="5">
+    </div>
+    <div class="field">
       <label for="userInput">称呼（可选，用于问候语）</label>
       <input type="text" id="userInput" maxlength="12" placeholder="如：小宇">
     </div>
     <div class="btns">
       <button class="btn btn-ghost" id="btnCloseSettings">取消</button>
       <button class="btn btn-primary" id="btnSaveSettings">保存</button>
+    </div>
+    <hr>
+    <div class="section-title" style="font-size:14px;margin-bottom:10px">考试倒计时</div>
+    <div class="field">
+      <label for="exam1Name">考试一 · 名称</label>
+      <input type="text" id="exam1Name" maxlength="16" placeholder="如：自考本科">
+    </div>
+    <div class="field">
+      <label for="exam1Date">考试一 · 日期（留空则不显示）</label>
+      <input type="date" id="exam1Date">
+    </div>
+    <div class="field">
+      <label for="exam2Name">考试二 · 名称</label>
+      <input type="text" id="exam2Name" maxlength="16" placeholder="如：考研初试">
+    </div>
+    <div class="field">
+      <label for="exam2Date">考试二 · 日期（留空则不显示）</label>
+      <input type="date" id="exam2Date">
     </div>
     <hr>
     <div class="section-title" style="font-size:14px;margin-bottom:10px">数据备份</div>
@@ -293,7 +410,7 @@ function fmtHMS(sec){ sec = Math.max(0, Math.floor(sec));
 /* ================= 数据模型（localStorage） ================= */
 const STORE_KEY = 'study_checkin_v1';
 function blankData(){
-  return { v: 1, settings: { dailyGoalMin: 120, user: '' }, records: {}, running: null };
+  return { v: 1, settings: { dailyGoalMin: 120, weeklyGoalHours: 50, user: '', exams: [{ name: '第一场考试', date: '2026-11-30' }, { name: '第二场考试', date: '2027-03-15' }] }, records: {}, running: null };
 }
 function loadData(){
   try {
@@ -463,6 +580,7 @@ function updateLiveUI(){
   const cb = $('checkinBtn');
   cb.textContent = done ? '✅ 今日已打卡（点击取消）' : '✅ 今日打卡';
   cb.classList.toggle('done', !!done);
+  updateCountdownLive();
 }
 
 function renderWeek(){
@@ -504,6 +622,274 @@ function renderWeek(){
     s.textContent = (w.isToday ? '今天' : '周' + WEEK[new Date(a[0], a[1] - 1, a[2]).getDay()]) + (w.done ? ' · 已学' : '');
     c.appendChild(b); c.appendChild(s); lab.appendChild(c);
   });
+}
+
+/* ================= 时长显示（以小时为主） ================= */
+function fmtH(sec){                       /* 统计用：1.5 小时 */
+  sec = Math.max(0, sec);
+  if (sec <= 0) return '0 小时';
+  return (sec / 3600).toFixed(1) + ' 小时';
+}
+function fmtHS(sec){                      /* 日历格用：1.5h / 45m */
+  if (sec <= 0) return '';
+  const h = sec / 3600;
+  if (h >= 1) return (h >= 10 ? h.toFixed(0) : h.toFixed(1)) + 'h';
+  return Math.round(sec / 60) + 'm';
+}
+function timeOf(ts){
+  if (!ts) return '--:--';
+  const d = new Date(ts);
+  return pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+/* ================= 按月查看 ================= */
+/* ================= 本周目标（周日~周六） ================= */
+/* ================= 考试倒计时 ================= */
+let cdEls = [];
+function examTargetTs(dateStr){
+  const a = String(dateStr || '').split('-').map(Number);
+  if (a.length !== 3 || !a[0] || !a[1] || !a[2]) return null;
+  return new Date(a[0], a[1] - 1, a[2], 0, 0, 0).getTime();
+}
+function renderCountdown(){
+  const box = $('cdGrid');
+  box.innerHTML = '';
+  cdEls = [];
+  const list = (D.settings.exams || []).filter(function (e) { return e && examTargetTs(e.date); });
+  if (!list.length) {
+    $('cdHint').textContent = '可在「⚙️ 设置」里填写考试名称与日期';
+    const empty = document.createElement('div');
+    empty.className = 'cd-sub';
+    empty.textContent = '还没有设置考试倒计时，去设置里加一个吧。';
+    box.appendChild(empty);
+    return;
+  }
+  $('cdHint').textContent = '每天 0 点自动更新';
+  const wk = D.settings.weeklyGoalHours || 50;
+  list.forEach(function (ex) {
+    const ts = examTargetTs(ex.date);
+    const a = String(ex.date).split('-').map(Number);
+    const dObj = new Date(a[0], a[1] - 1, a[2]);
+
+    const card = document.createElement('div');
+    card.className = 'cd-card';
+
+    const name = document.createElement('div');
+    name.className = 'cd-name';
+    const nm = document.createElement('span'); nm.textContent = ex.name || '考试';
+    const dt = document.createElement('span');
+    dt.textContent = a[0] + ' 年 ' + a[1] + ' 月 ' + a[2] + ' 日 · 周' + WEEK[dObj.getDay()];
+    name.appendChild(nm); name.appendChild(dt);
+
+    const num = document.createElement('div');
+    num.className = 'cd-num';
+    const big = document.createElement('b');
+    const unit = document.createElement('span');
+    num.appendChild(big); num.appendChild(unit);
+
+    const sub = document.createElement('div');
+    sub.className = 'cd-sub';
+
+    card.appendChild(name); card.appendChild(num); card.appendChild(sub);
+    box.appendChild(card);
+    cdEls.push({ card: card, big: big, unit: unit, sub: sub, ts: ts, wk: wk });
+  });
+  updateCountdownLive();
+}
+function updateCountdownLive(){
+  const now = new Date();
+  const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  cdEls.forEach(function (o) {
+    const days = Math.round((o.ts - todayMid) / 86400000);
+    if (days < 0) {
+      o.card.classList.add('past');
+      o.card.classList.remove('urgent');
+      o.big.textContent = '已结束';
+      o.unit.textContent = '';
+      o.sub.textContent = '祝顺利 🍀（可在「⚙️ 设置」里改成下一场考试）';
+      return;
+    }
+    o.card.classList.remove('past');
+    if (days === 0) {
+      o.card.classList.add('urgent');
+      o.big.textContent = '就是今天';
+      o.unit.textContent = '';
+      o.sub.textContent = '稳住心态，正常发挥就好，加油！';
+      return;
+    }
+    o.card.classList.toggle('urgent', days <= 7);
+    o.big.textContent = days;
+    o.unit.textContent = '天';
+    o.sub.innerHTML = (days === 1
+      ? '明天就要考试了，加油！<br>'
+      : '约 ' + Math.floor(days / 7) + ' 周 ' + (days % 7) + ' 天<br>') +
+      '按每周 ' + o.wk + ' 小时目标，还能学约 ' + Math.round(days / 7 * o.wk) + ' 小时';
+  });
+}
+
+function weeklyGoalSec(){
+  return Math.max(1, Math.round((D.settings.weeklyGoalHours || 50) * 3600));
+}
+function weekStartDay(){
+  const n = new Date();
+  const d = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  d.setDate(d.getDate() - d.getDay());          /* getDay() 0 = 周日 */
+  return d;
+}
+function weekDays(){
+  const s = weekStartDay();
+  const out = [];
+  const now = new Date();
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(s.getFullYear(), s.getMonth(), s.getDate() + i);
+    const k = dateKeyOf(d);
+    const rec = D.records[k];
+    let sec = rec ? (rec.sec || 0) : 0;
+    if (k === todayKey() && D.running) sec += runningSec();
+    out.push({
+      key: k, sec: sec, done: isStudyDay(k),
+      isToday: k === todayKey(), isFuture: d > now
+    });
+  }
+  return out;
+}
+function renderWeekGoal(){
+  const ws = weekDays();
+  const goal = weeklyGoalSec();
+  const doneSec = ws.reduce(function (s, w) { return s + w.sec; }, 0);
+  const pct = Math.round(doneSec / goal * 100);
+
+  const a = ws[0].key.split('-').map(Number), b = ws[6].key.split('-').map(Number);
+  $('weekRange').textContent = a[1] + '/' + a[2] + ' - ' + b[1] + '/' + b[2] + '（周日 ~ 周六）';
+  $('weekDone').textContent = fmtH(doneSec);
+  $('weekOf').textContent = '/ 目标 ' + (goal / 3600).toFixed(goal % 3600 === 0 ? 0 : 1) + ' 小时';
+  $('weekPct').textContent = pct + '%';
+
+  const fill = $('weekFill');
+  fill.style.width = Math.min(100, pct) + '%';
+  fill.classList.toggle('over', pct >= 100);
+
+  const studyDays = ws.filter(function (w) { return w.sec > 0; }).length;
+  const rest = goal - doneSec;
+  $('weekSub').textContent = rest > 0
+    ? '还差 ' + fmtH(rest) + ' 达成 · 本周已学 ' + studyDays + ' 天'
+    : '🎉 本周目标已达成 · 本周已学 ' + studyDays + ' 天';
+
+  const box = $('weekDays');
+  box.innerHTML = '';
+  const perDay = goal / 7;                       /* 平摊到每天的目标 */
+  ws.forEach(function (w, i) {
+    const cell = document.createElement('div');
+    const r = perDay > 0 ? Math.min(1, w.sec / perDay) : 0;
+    cell.className = 'wk-day' + (w.isToday ? ' today' : '') + (w.sec <= 0 ? ' zero' : '') + (r >= 0.5 ? ' strong' : '');
+    if (w.sec > 0) {
+      cell.style.background = 'linear-gradient(180deg,rgba(99,102,241,' +
+        (0.14 + 0.5 * r).toFixed(2) + '),rgba(139,92,246,' + (0.08 + 0.45 * r).toFixed(2) + '))';
+    }
+    const dn = document.createElement('b'); dn.textContent = WEEK[i];
+    const tn = document.createElement('span'); tn.textContent = w.sec > 0 ? fmtHS(w.sec) : '—';
+    cell.appendChild(dn); cell.appendChild(tn);
+    box.appendChild(cell);
+  });
+}
+
+let viewY = new Date().getFullYear();
+let viewM = new Date().getMonth();   /* 0-11 */
+let selectedKey = null;
+
+function monthKeys(y, m){
+  const out = [];
+  const days = new Date(y, m + 1, 0).getDate();
+  for (let d = 1; d <= days; d++) out.push(y + '-' + pad(m + 1) + '-' + pad(d));
+  return out;
+}
+function monthStat(y, m){
+  let days = 0, ck = 0, sec = 0;
+  monthKeys(y, m).forEach(function (k) {
+    const r = D.records[k];
+    const s = r ? (r.sec || 0) : 0;
+    if (isStudyDay(k)) days++;
+    if (r && r.checkin) ck++;
+    sec += s;
+  });
+  return { days: days, ck: ck, sec: sec };
+}
+function renderMonth(){
+  const goal = goalSec();
+  const now = new Date();
+  const isCur = (viewY === now.getFullYear() && viewM === now.getMonth());
+  $('monthLabel').textContent = viewY + ' 年 ' + (viewM + 1) + ' 月';
+  $('nextMonth').disabled = isCur;
+  $('nextMonth').style.opacity = isCur ? 0.35 : 1;
+
+  const st = monthStat(viewY, viewM);
+  const daysInMonth = new Date(viewY, viewM + 1, 0).getDate();
+  $('monthStats').innerHTML =
+    '<div class="mstat"><div class="num">' + st.days + ' 天</div><div class="lab">学习天数</div></div>' +
+    '<div class="mstat"><div class="num">' + st.ck + ' 天</div><div class="lab">打卡天数</div></div>' +
+    '<div class="mstat"><div class="num">' + fmtH(st.sec) + '</div><div class="lab">本月总时长</div></div>' +
+    '<div class="mstat"><div class="num">' + fmtH(st.sec / daysInMonth) + '</div><div class="lab">日均时长</div></div>';
+
+  const head = ['日', '一', '二', '三', '四', '五', '六'];
+  $('calHead').innerHTML = head.map(function (w) { return '<span>' + w + '</span>'; }).join('');
+
+  const grid = $('calGrid');
+  grid.innerHTML = '';
+  const lead = new Date(viewY, viewM, 1).getDay();   /* 0 = 周日，第一列就是周日 */
+  for (let i = 0; i < lead; i++) {
+    const b = document.createElement('div');
+    b.className = 'cal-cell blank';
+    grid.appendChild(b);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const k = viewY + '-' + pad(viewM + 1) + '-' + pad(d);
+    const r = D.records[k];
+    const sec = r ? (r.sec || 0) : 0;
+    const has = !!(sec > 0 || (r && r.checkin));
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell' + (has ? ' has' : '') + (k === todayKey() ? ' today' : '') + (k === selectedKey ? ' sel' : '');
+    const ratio = Math.min(1, sec / goal);
+    if (sec > 0) {
+      cell.style.background = 'linear-gradient(180deg,rgba(99,102,241,' +
+        (0.16 + 0.55 * ratio).toFixed(2) + '),rgba(139,92,246,' + (0.10 + 0.50 * ratio).toFixed(2) + '))';
+      if (ratio >= 0.5) cell.classList.add('strong');
+    }
+    const dn = document.createElement('div'); dn.className = 'd'; dn.textContent = d;
+    const tn = document.createElement('div'); tn.className = 't'; tn.textContent = sec > 0 ? fmtHS(sec) : '';
+    cell.appendChild(dn); cell.appendChild(tn);
+    if (r && r.checkin) {
+      const ck = document.createElement('span'); ck.className = 'ck'; ck.textContent = '✓'; cell.appendChild(ck);
+    }
+    if (has) {
+      cell.addEventListener('click', function () {
+        selectedKey = (selectedKey === k) ? null : k;
+        renderMonth();
+      });
+    }
+    grid.appendChild(cell);
+  }
+  renderDayDetail();
+}
+function renderDayDetail(){
+  const box = $('dayDetail');
+  const r = selectedKey ? D.records[selectedKey] : null;
+  if (!selectedKey || !r) {
+    box.innerHTML = '<span>点日历上的某一天，可以查看那天的明细 👆</span>';
+    return;
+  }
+  const head = '<b>' + fmtDate(selectedKey) + '</b>' + (r.checkin ? ' · 已打卡 ✅' : '') +
+    ' · 共 ' + fmtHM(r.sec) + '（' + fmtH(r.sec) + '）';
+  const list = ((r.sessions) || []).map(function (s) {
+    return '<li><span>' + (s.subject ? esc(s.subject) : '学习') + '</span>' +
+      '<span>' + timeOf(s.startTs) + ' - ' + timeOf(s.endTs) + ' · ' + fmtHM(s.sec) + '</span></li>';
+  }).join('');
+  box.innerHTML = head + (list ? '<ul>' + list + '</ul>'
+    : '<div style="margin-top:6px">这天没有计时记录（只有打卡或补记时长）</div>');
 }
 
 function renderRecords(){
@@ -561,8 +947,8 @@ function renderAll(){
   const wkSec = wk.reduce((s, w) => s + w.sec, 0);
   $('stStreak').querySelector('.num').textContent = streak + ' 天';
   $('stDays').querySelector('.num').textContent = tot.totalDays + ' 天';
-  $('stTotal').querySelector('.num').textContent = fmtHM(tot.totalSec);
-  $('stAvg').querySelector('.num').textContent = fmtHM(wkSec / 7);
+  $('stTotal').querySelector('.num').textContent = fmtH(tot.totalSec);
+  $('stAvg').querySelector('.num').textContent = fmtH(wkSec / 7);
 
   const goal = goalSec();
   const cur = liveSecToday();
@@ -576,6 +962,11 @@ function renderAll(){
 
   renderWeek();
   renderRecords();
+  renderCountdown();
+  renderWeekGoal();
+  renderMonth();
+  const shownDays = Object.keys(D.records).filter(k => isStudyDay(k)).length;
+  $('recHint').textContent = '累计 ' + tot.totalDays + ' 个学习日 · 下方显示最近 ' + Math.min(12, shownDays) + ' 天（整月请看上方月历）';
   updateLiveUI();
 }
 
@@ -583,12 +974,62 @@ function renderAll(){
 const modal = $('modal');
 function openModal(){
   $('goalInput').value = D.settings.dailyGoalMin;
+  $('weekGoalInput').value = D.settings.weeklyGoalHours || 50;
   $('userInput').value = D.settings.user || '';
+  const exs = D.settings.exams || [];
+  $('exam1Name').value = (exs[0] && exs[0].name) || '';
+  $('exam1Date').value = (exs[0] && exs[0].date) || '';
+  $('exam2Name').value = (exs[1] && exs[1].name) || '';
+  $('exam2Date').value = (exs[1] && exs[1].date) || '';
   modal.classList.remove('hidden');
 }
 function closeModal(){ modal.classList.add('hidden'); }
+/* 生成"人可读 + 无损"的导出数据：以小时为主展示，同时保留 sec 原始秒值 */
+function buildExport(){
+  const tot = calcTotals();
+  const recs = {};
+  Object.keys(D.records).sort().forEach(function (k) {
+    const r = D.records[k] || {};
+    const sec = r.sec || 0;
+    recs[k] = {
+      date: k,
+      weekday: fmtDate(k).split(' ')[1] || '',
+      checkin: !!r.checkin,
+      hours: +(sec / 3600).toFixed(2),
+      duration: fmtHM(sec),
+      sec: sec,
+      sessions: (r.sessions || []).map(function (s) {
+        const ss = s.sec || 0;
+        return {
+          subject: s.subject || '',
+          start: timeOf(s.startTs),
+          end: timeOf(s.endTs),
+          hours: +(ss / 3600).toFixed(2),
+          duration: fmtHM(ss),
+          sec: ss
+        };
+      })
+    };
+  });
+  const d = new Date();
+  return {
+    app: '学习打卡助手',
+    exportVersion: 1,
+    exportedAt: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + timeOf(d.getTime()),
+    summary: {
+      studyDays: tot.totalDays,
+      totalHours: +(tot.totalSec / 3600).toFixed(2),
+      totalDuration: fmtHM(tot.totalSec),
+      streakDays: calcStreak(),
+      dailyGoalHours: +(D.settings.dailyGoalMin / 60).toFixed(2)
+    },
+    settings: D.settings,
+    records: recs,
+    running: D.running
+  };
+}
 function exportData(){
-  const blob = new Blob([JSON.stringify(D, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(buildExport(), null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = '学习打卡助手备份-' + todayKey() + '.json';
@@ -638,14 +1079,34 @@ $('btnSaveSettings').addEventListener('click', () => {
   if (!Number.isFinite(goal) || goal < 1) goal = 120;
   goal = Math.min(1440, Math.max(1, goal));
   D.settings.dailyGoalMin = goal;
+  let wgoal = Math.round(Number($('weekGoalInput').value));
+  if (!Number.isFinite(wgoal) || wgoal < 1) wgoal = 50;
+  wgoal = Math.min(168, Math.max(1, wgoal));
+  D.settings.weeklyGoalHours = wgoal;
+  D.settings.exams = [
+    { name: ($('exam1Name').value || '').trim() || '第一场考试', date: ($('exam1Date').value || '').trim() },
+    { name: ($('exam2Name').value || '').trim() || '第二场考试', date: ($('exam2Date').value || '').trim() }
+  ];
   D.settings.user = ($('userInput').value || '').trim();
   saveData(); renderAll(); closeModal();
-  toast('设置已保存 ✅ 每日目标 ' + goal + ' 分钟');
+  toast('设置已保存 ✅ 每日 ' + goal + ' 分钟 · 每周 ' + wgoal + ' 小时');
 });
 $('btnExport').addEventListener('click', exportData);
 $('btnImport').addEventListener('click', () => $('importFile').click());
 $('importFile').addEventListener('change', e => importData(e.target.files && e.target.files[0]));
 $('btnReset').addEventListener('click', resetData);
+
+/* 月份切换 */
+$('prevMonth').addEventListener('click', function () {
+  viewM--; if (viewM < 0) { viewM = 11; viewY--; }
+  selectedKey = null; renderMonth();
+});
+$('nextMonth').addEventListener('click', function () {
+  const n = new Date();
+  if (viewY === n.getFullYear() && viewM === n.getMonth()) return;
+  viewM++; if (viewM > 11) { viewM = 0; viewY++; }
+  selectedKey = null; renderMonth();
+});
 
 /* ================= 启动 ================= */
 settleStaleSession();
